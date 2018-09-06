@@ -10,6 +10,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+  @import url('./../../assets/common');
 
 </style>

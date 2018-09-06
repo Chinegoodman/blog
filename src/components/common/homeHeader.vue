@@ -1,12 +1,13 @@
 <template>
     <div class="header">
-      <div class="headercontent">
+      <div class="headercontent" :class="{headercontentshow:headercontenthidestatus}">
         <img class="headericon" :src="headerdata.headericonlink" :alt="headerdata.iconalt">
         <p class="headertitle">{{headerdata.title}}</p>
         <ul class="headerlinks">
           <li v-for="(item,index) in headerdata.headerlinks" :key="index" @click="changepage(item.linkkey)"><i :class="item.iconfont" :title="item.title"></i></li>
         </ul>
       </div>
+      <button @click="headercontenthidestatus=!headercontenthidestatus">显示/隐藏</button>
     </div>
 </template>
 
@@ -15,14 +16,20 @@
         name: "homeHeader",
       data(){
           return{
+            headercontenthidestatus:false,
             // 顶部微信状态：默认隐藏
             headerweinxinstatus:false,
             headerdata:{
-              // headericonlink:require('./../../assets/xpxj.png'),
-              headericonlink:'',
+              headericonlink:require('./../../assets/xpxj.png'),
+              // headericonlink:'',
               iconalt:'icon图片',
               title:'你好。😛',
               headerlinks:[
+                {
+                  linkkey:'index',
+                  iconfont:'iconfont icon-cangku',
+                  title:'首页',
+                },
                 {
                   linkkey:'youxiang',
                   iconfont:'iconfont icon-youxiang',
@@ -39,11 +46,6 @@
                   title:'gitlab',
                 },
                 {
-                  linkkey:'gerenzhongxin',
-                  iconfont:'iconfont icon-gerenzhongxin',
-                  title:'个人中心',
-                },
-                {
                   linkkey:'web2',
                   iconfont:'iconfont icon-web2',
                   title:'老站点',
@@ -54,9 +56,9 @@
                   title:'订阅号',
                 },
                 {
-                  linkkey:'index',
-                  iconfont:'iconfont icon-cangku',
-                  title:'首页',
+                  linkkey:'gerenzhongxin',
+                  iconfont:'iconfont icon-gerenzhongxin',
+                  title:'个人中心',
                 },
               ]
             }
@@ -96,17 +98,23 @@
 <style scoped lang="less">
   @import url('./../../assets/common');
   .header{
+    background-color: rgba(0,0,0,0.5);
     border-bottom: @border;
     box-shadow: @shadow;
+    position: relative;
+    height: @headerheight;
     .headercontent{
       position: relative;
+      top:  -@headerheight;
       min-width: @minwidth;
       width: @width;
       margin: 0 auto;
       height: @headerheight;
+      transition: top 1.5s;
       .headericon{
-        height: 100%;
-        background: #000;
+        padding-top: @headerheight/3/2;
+        height: @headerheight/3*2;
+        /*background: #000;*/
         float: left;
       }
       .headertitle{
@@ -137,6 +145,15 @@
           }
         }
       }
+    }
+    .headercontentshow{
+      top:0;
+    }
+    &>button{
+      position: absolute;
+      left: 10px;
+      bottom: 0px;
+      z-index: 500;
     }
   }
 </style>
