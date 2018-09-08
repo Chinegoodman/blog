@@ -20,8 +20,8 @@
   @import url('./../../assets/common');
   .homeright{
     position: fixed;
-    right: 10px;
-    bottom: 20px;
+    right: @sidecommontobody;
+    bottom: @sidecommonbottom;
     height: 35px;
     width: 35px;
     border-radius: 50%;

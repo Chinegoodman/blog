@@ -1,7 +1,9 @@
 <template>
     <div class="wrapindex">
-      <selfSwiper :swiperdata="swiperdata"></selfSwiper>
-      <selfMusic></selfMusic>
+      <selfSwiper class="wrapindex_swiper" :swiperdata="swiperdata"></selfSwiper>
+      <div class="wrapindex_music">
+        <selfMusic></selfMusic>
+      </div>
       <div class="wrapindex_msglist">
 
       </div>
@@ -21,13 +23,14 @@
           swiperdata:{
             activetindex:0,
             swiperheight:{
-              height:'260px'
+              height:'510px'
             },
             swiperarr:[
               {
-                picurl:'https://cn.vuejs.org/images/logo.png',
+                // picurl:'https://cn.vuejs.org/images/logo.png',
+                picurl:'https://www.jeep.com.cn/renegade/img/skv2.jpg',
                 linktype:'http',
-                linkurl:'https://www.jeep.com.cn/renegade/img/yuantu/wg5.jpg',
+                linkurl:'https://www.jeep.com.cn/renegade/',
                 title:'自由侠title',
                 tip:'自由侠tip'
               },
@@ -60,8 +63,19 @@
 
 <style scoped lang="less">
   @import url('./../../assets/common');
-  div.wrapindex{
-    box-shadow: @shadow;
-    border: @border;
+  .wrapindex{
+    .wrapindex_swiper{
+      min-width: @minwidth;
+      width: @width;
+      margin: 0 auto;
+    }
+    .wrapindex_music{
+      /*margin: 10px auto;*/
+      min-width: @minwidth;
+      width: @width;
+      margin: 0 auto;
+      box-sizing: border-box;
+      padding: 25px 0;
+    }
   }
 </style>

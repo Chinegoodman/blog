@@ -18,7 +18,8 @@ export default {
     components:{
       homeHeader,homeFooter,wrapContent,homeLeft,homeRight
     },
-  name: 'App'
+  name: 'App',
+
 }
 </script>
 

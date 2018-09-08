@@ -7,7 +7,7 @@
           <li v-for="(item,index) in headerdata.headerlinks" :key="index" @click="changepage(item.linkkey)"><i :class="item.iconfont" :title="item.title"></i></li>
         </ul>
       </div>
-      <button @click="headercontenthidestatus=!headercontenthidestatus">显示/隐藏</button>
+      <div class="button" @click="headercontenthidestatus=!headercontenthidestatus">显示/隐藏</div>
     </div>
 </template>
 
@@ -98,10 +98,14 @@
 <style scoped lang="less">
   @import url('./../../assets/common');
   .header{
-    background-color: rgba(0,0,0,0.5);
+    background-color: @headerbgcolor;
     border-bottom: @border;
     box-shadow: @shadow;
-    position: relative;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
     height: @headerheight;
     .headercontent{
       position: relative;
@@ -137,6 +141,7 @@
           border: @border;
           border-radius: 50%;
           background-color: @headerdefaultlinkbgcolor;
+          cursor: pointer;
           i{
             font-size: @headerlinkiconheight/3*2;
           }
@@ -149,11 +154,17 @@
     .headercontentshow{
       top:0;
     }
-    &>button{
+    &>.button{
       position: absolute;
-      left: 10px;
-      bottom: 0px;
+      left: @headerbtnleft;
+      top: @headerbtntop;
       z-index: 500;
+      color: rgba(0,0,0,0.2);
+      background-color: rgba(255,255,255,0.2);
+      display: none;
+    }
+    &:hover>.button{
+      display: block;
     }
   }
 </style>

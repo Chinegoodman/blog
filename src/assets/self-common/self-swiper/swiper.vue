@@ -112,6 +112,7 @@
       color: @color;
       transform: translateY(-50%);
       background: @bgcolor;
+      cursor: pointer;
       &:hover{
         background: @bgactivecolor;
         color: @activecolor;
@@ -138,6 +139,7 @@
         color: @color;
         font-style: normal;
         margin-right: 15px;
+        cursor: pointer;
         &:hover{
           background: @bgactivecolor;
           color: @activecolor;
