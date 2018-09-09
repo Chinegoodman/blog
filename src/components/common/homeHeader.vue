@@ -16,7 +16,7 @@
         name: "homeHeader",
       data(){
           return{
-            headercontenthidestatus:false,
+            headercontenthidestatus:true,
             // 顶部微信状态：默认隐藏
             headerweinxinstatus:false,
             headerdata:{
