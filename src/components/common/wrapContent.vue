@@ -10,11 +10,13 @@
     data(){
       return{
         wrapcontentstyle:{
-          backgroundImage:"url('http://p2fo7k1rk.bkt.clouddn.com/bd1e1201808100938304442.jpg')",
+          // backgroundImage:"url('http://img.hb.aicdn.com/4047c0f9599a39b1d6bd0940d6828680a37a0a032fe24-ZDBI2r_fw658')",
+          backgroundImage:"",
           backgroundSize:'cover',
           backgroundPosition:'center center',
           backgroundRepeat:'repeat',
-          backgroundAttachment:'fixed'
+          backgroundAttachment:'fixed',
+          backgroundColor:'#000',
         }
       }
     },
@@ -26,7 +28,7 @@
     mounted(){
       // let wrapcontent_height = this.$refs.wrapcontent.offsetTop;
       let wrapcontent_height = this.$refs.wrapcontent.offsetHeight;
-      console.log(wrapcontent_height)
+      // console.log(wrapcontent_height)
       this.$store.commit('muthomewraocontent_height',wrapcontent_height)
     }
   }

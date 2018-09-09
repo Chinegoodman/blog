@@ -2,7 +2,7 @@
     <div class="wrapindex">
       <selfSwiper class="wrapindex_swiper" :swiperdata="swiperdata"></selfSwiper>
       <div class="wrapindex_music">
-        <selfMusic></selfMusic>
+        <selfMusic :musicdata="musicdata"></selfMusic>
       </div>
       <div class="wrapindex_msglist">
 
@@ -55,6 +55,39 @@
             pointsboxstyle:'',
             pointstyle:'',
             pointactivestyle:'',
+          },
+          musicdata:{
+            title:'😆😳你好，这是我自己收藏的音乐🎶',
+            musicarr:[
+              {
+                id:11,
+                name:'Name',
+                singer:'歌手名',
+                mus_link:'',
+                mus_lang:'100',
+              },
+              {
+                id:11,
+                name:'Name',
+                singer:'歌手名',
+                mus_link:'',
+                mus_lang:'100',
+              },
+              {
+                id:11,
+                name:'Name',
+                singer:'歌手名',
+                mus_link:'',
+                mus_lang:'100',
+              },
+              {
+                id:11,
+                name:'Name',
+                singer:'歌手名',
+                mus_link:'',
+                mus_lang:'100',
+              },
+            ]
           }
         }
       }
