@@ -37,10 +37,13 @@
         let homefooter_offsetHeight = this.$refs.homefooter.offsetHeight;
         let homeheader_height = 65;//此处顶部高度不计入考量。因为wrapcontent.vue 部分已经设置了paddingtop，包含了此部分的高度。如有变动去common.less修改即可
         let homewraocontent_height = this.$store.getters.gethomewraocontent_height;
-        // console.log(`windowHeight:${windowHeight};homefooter_offtop:${homefooter_offtop};homefooter_offsetHeight:${homefooter_offsetHeight};homewraocontent_height:${homewraocontent_height}` )
-        if(windowHeight>homefooter_offtop+220){
+        console.log(`windowHeight:${windowHeight};homefooter_offtop:${homefooter_offtop};homefooter_offsetHeight:${homefooter_offsetHeight};homewraocontent_height:${homewraocontent_height}` )
+        // if(windowHeight>=homefooter_offtop+220){
+        if(windowHeight>=homefooter_offtop){
+          console.log('mutfooterfixedchange:true')
           this.$store.commit('mutfooterfixedchange',true)
         }else {
+          console.log('mutfooterfixedchange:false')
           this.$store.commit('mutfooterfixedchange',false)
         }
       }

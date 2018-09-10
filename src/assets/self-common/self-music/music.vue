@@ -1,17 +1,17 @@
 <template>
     <div class="self-music">
       <p class="self_music_title">{{musicdata.title}}</p>
-      <div class="music_list">
+      <div class="music_list" :style="musiclistsytle">
         <div class="music_li">
           <span>编号</span>
           <span>歌曲名称</span>
           <span>歌手名</span>
         </div>
 
-        <div class="music_li" v-for="(item,index) in musicdata.musicarr" :key="index">
+        <div class="music_li" v-for="(item,index) in musicarr" :key="index">
           <span class="_textover">{{item.id}}</span>
           <span class="_textover">{{item.name}}</span>
-          <span class="_textover">{{item.singer}}<i @click="listchose(index)">播放</i></span>
+          <span class="_textover">{{item.singer}}<i @click="listchoose(item)">播放</i></span>
         </div>
       </div>
       <div class="music_showbox">
@@ -21,21 +21,21 @@
             <i :style="musicjdtpoint" class="music_jdt_point"></i>
           </div>
           <div class="music_change up">上一首</div>
-          <div class="music_play_pause">播放/暂停</div>
+          <div class="music_play_pause" @click="changemusicstatus">播放/暂停</div>
           <div class="music_change down">下一首</div>
           <div class="music_voice">
-            <div class="music_voice_line">
+            <div class="music_voice_line" @click="changevoicce">
               <i :style="musicvoicepoint" class="music_voice_point"></i>
             </div>
           </div>
-          <div class="music_voice_number">42%</div>
+          <div class="music_voice_number">{{musicvoicepoint.left}}</div>
           <div class="music_time">
-            12:30/12:52
+            {{currenttime}}/{{durationtime}}
           </div>
         </div>
         <!--<audio controls ref="audio" src="http://www.ooo0o.com/demo/music/fade.mp3"></audio>-->
-        <audio controls ref="audio" :src="musiclink"></audio>
-        <!--<audio controls ref="audio" src="https://m10.music.126.net/20180910040454/ed9a816f749723cd0232c792b42cf5cc/ymusic/a962/3503/1b65/d6cc5999e8fc8d1a6569e8340d4e08ae.mp3"></audio>-->
+        <!--<audio controls ref="audio" :src="currentmusicdataurl"></audio>-->
+        <audio controls ref="audio" :src="currentmusicdata.url"></audio>
       </div>
     </div>
 </template>
@@ -46,21 +46,31 @@
         name: "music",
       data(){
           return{
+            currenttime:'',
+            durationtime:'',
             musicjdtpoint:{
-              width:'60%'
+              width:'0%'
             },
             musicvoicepoint:{
               left:'30%'
             },
+            currentmusicdata:{},
+            musicarr:[],
+            musiclistsytle:{
+              backgroundImage:'',
+            },
 
-            musiclink:''
+            musicstatus:false
           }
       },
       methods:{
-        listchose(index){
-          console.log(`歌曲的序列号（下标）为：${index}`)
+        listchoose(obj){
+          // console.log(`歌曲的序列号（下标）为：${index}`)
+          this.$refs.audio.pause();
+          this.currentmusicdata = obj;
+          this.changemusicstatus('play')
         },
-        cavtest(){
+        canvasdone(){
           let audio = this.$refs.audio;
           let canvas = this.$refs.musicCanvas;
           let context = canvas.getContext("2d");
@@ -79,7 +89,7 @@
           /*存储频谱数据，Uint8Array数组创建的时候必须制定长度，
           长度就从analyser.frequencyBinCount里面获取，长度是1024*/
           var   arrData = new Uint8Array(analyser.frequencyBinCount),
-            count = Math.min(500,arrData.length), //能量柱个数,不能大于数组长度1024,没意义
+            count = Math.min(100,arrData.length), //能量柱个数,不能大于数组长度1024,没意义
             /*计算步长，每隔多少取一个数据用于绘画，意抽取片段数据来反映整体频谱规律，
                    乘以0.6是因为，我测试发现数组长度600以后的数据基本都是0了，
                    画出来能量柱高度就是0了，为了效果好一点，所以只取前60%，
@@ -96,7 +106,7 @@
           //设置线条宽度
           context.lineWidth = lineWidth;
           //渲染函数
-          function render() {
+          function render(){
             //每次要清除画布
             context.clearRect(0, 0, width, height);
             //获取频谱值
@@ -134,16 +144,68 @@
           }
           render()
         },
+        setfirstmusic(){
+          // this.currentmusicdata = this.musicarr[1];
+        },
         getmusiclist(){
-          this.$ajax.get('http://www.egtch.com/t_works/Vuedata/data.php').then(e=>{
-            console.log(e)
-            this.musiclink = e.data.music[1].url
+          this.$ajax.get(this.musicdata.musilistapi).then(e=>{
+            console.log(e.data)
+            this.musicarr = e.data.music;
+            this.currentmusicdata.url = e.data.music[0].url
           })
+        },
+
+        changemusicstatus(status){
+          if(status == 'play'){
+            // clearInterval(timeinterval)
+            // this.$refs.audio.pause();
+            this.$refs.audio.play();
+            this.showmusicmsg()
+            this.musicstatus = true;
+            return;
+          }
+          if(this.musicstatus){
+            // true正在播放
+            // clearInterval(timeinterval)
+            this.$refs.audio.pause();
+            this.musicstatus = false;
+            this.showmusicmsg()
+          }else {
+            // false暂停播放
+            // clearInterval(timeinterval)
+            this.$refs.audio.play();
+            this.musicstatus = true
+
+            let timeinterval = setInterval(()=>{
+              this.showmusicmsg()
+            },200)
+          }
+        },
+        showmusicmsg(){
+          let musiclong = this.$refs.audio.duration||0
+          let musiccurrentTime = this.$refs.audio.currentTime||0
+          let musicvolume = this.$refs.audio.volume||1.0
+          this.currenttime = musiccurrentTime
+          this.durationtime = musiclong
+          this.musicjdtpoint.width = musiccurrentTime/musiclong*100 + '%'
+          this.musicvoicepoint.left = musicvolume*100 + '%'
+        },
+        changevoicce(e){
+          console.log(e)
+          // todo 添加调节音量  及添加调节播放进度功能
+          // todo 查看点击列表不播放问题
         }
       },
+      watch:{
+        // musicdata(nwwval,oldval){
+        //   console.log('watch')
+        // }
+      },
       mounted(){
+        // console.log(this.musicdata)
         this.getmusiclist()
-        this.cavtest()
+        this.canvasdone()
+        this.showmusicmsg()
       }
     }
 </script>
@@ -170,6 +232,7 @@
       box-sizing: border-box;
       width: 30%;
       border-right: @border;
+      background-size: cover;
       .music_li{
         box-sizing: border-box;
         display: flex;
@@ -228,7 +291,8 @@
         padding: 5px 15px;
         border-radius: 5px;
         padding-top: 37px;
-        opacity: 1;
+        opacity: 0;
+        background-color: rgba(91,91,91,0.65);
         transition: opacity 0.7s;
         &>*{
           cursor: pointer;
@@ -239,6 +303,9 @@
           color:@musicbtncolor;
           height: 20px;
           line-height: 20px;
+          &:hover{
+            box-shadow: @shadow;
+          }
         }
         .music_play_pause{
           margin: 0 20px;
@@ -322,6 +389,7 @@
           color: @musicbtncolor;
           height: 20px;
           line-height: 20px;
+          cursor: default;
         }
       }
       &:hover{
@@ -330,7 +398,7 @@
         }
       }
       audio{
-        display: block;
+        display: none;
         position: relative;
         top: -200px;
       }

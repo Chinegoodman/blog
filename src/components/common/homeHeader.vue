@@ -4,7 +4,12 @@
         <img class="headericon" :src="headerdata.headericonlink" :alt="headerdata.iconalt">
         <p class="headertitle">{{headerdata.title}}</p>
         <ul class="headerlinks">
-          <li v-for="(item,index) in headerdata.headerlinks" :key="index" @click="changepage(item.linkkey)"><i :class="item.iconfont" :title="item.title"></i></li>
+          <li v-for="(item,index) in headerdata.headerlinks" :key="index" @click="changepage(item.linkkey)">
+            <i :class="item.iconfont" :title="item.title"></i>
+            <div class="wxdyh" v-if="item.title=='订阅号'">
+              <img src="./../../assets/wxdyh.jpg" alt="">
+            </div>
+          </li>
         </ul>
       </div>
       <div class="button" @click="headercontenthidestatus=!headercontenthidestatus">显示/隐藏</div>
@@ -77,7 +82,7 @@
               window.open('http://219.141.209.187/users/pangshifeng/projects')
               break;
             case 'web2':
-              window.open('http://www.baidu.com')
+              window.open('http://bufulaidawo.com')
               break;
             case 'index':
               this.$router.push('/')
@@ -142,11 +147,38 @@
           border-radius: 50%;
           background-color: @headerdefaultlinkbgcolor;
           cursor: pointer;
+          position: relative;
           i{
             font-size: @headerlinkiconheight/3*2;
           }
           &:hover{
             background-color: @headerdefaultlinkhoverbgcolor;
+            .wxdyh{
+              display: block;
+            }
+          }
+          .wxdyh{
+            position: absolute;
+            left: 50%;
+            top: calc(100% + @sanjiaoxingheight ) ;
+            transform: translate(-50%,0);
+            width: 700%;
+            display: none;
+            img{
+              width: 100%;
+            }
+            /*height: ;*/
+            &:after{
+              content: '';
+              position: absolute;
+              bottom: 100%;
+              left: 50%;
+              transform: translate(-50%,0);
+              width: 0;
+              height: 0;
+              border: @sanjiaoxingwidth solid transparent;
+              border-bottom:  @sanjiaoxingheight solid #fff;
+            }
           }
         }
       }

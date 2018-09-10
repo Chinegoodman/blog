@@ -58,38 +58,13 @@
           },
           musicdata:{
             title:'😆😳你好，这是我自己收藏的音乐🎶',
-            musicarr:[
-              {
-                id:11,
-                name:'Name',
-                singer:'歌手名',
-                mus_link:'',
-                mus_lang:'100',
-              },
-              {
-                id:11,
-                name:'Name',
-                singer:'歌手名',
-                mus_link:'',
-                mus_lang:'100',
-              },
-              {
-                id:11,
-                name:'Name',
-                singer:'歌手名',
-                mus_link:'',
-                mus_lang:'100',
-              },
-              {
-                id:11,
-                name:'Name',
-                singer:'歌手名',
-                mus_link:'',
-                mus_lang:'100',
-              },
-            ]
+            musilistapi:'http://www.egtch.com/t_works/Vuedata/data.php'
           }
         }
+      },
+      methods:{
+      },
+      created(){
       }
     }
 </script>

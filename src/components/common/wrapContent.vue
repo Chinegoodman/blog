@@ -11,12 +11,11 @@
       return{
         wrapcontentstyle:{
           // backgroundImage:"url('http://img.hb.aicdn.com/4047c0f9599a39b1d6bd0940d6828680a37a0a032fe24-ZDBI2r_fw658')",
-          backgroundImage:"",
+          // backgroundImage:"",
           backgroundSize:'cover',
           backgroundPosition:'center center',
           backgroundRepeat:'repeat',
-          backgroundAttachment:'fixed',
-          backgroundColor:'#000',
+          backgroundAttachment:'fixed'
         }
       }
     },
