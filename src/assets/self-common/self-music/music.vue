@@ -46,8 +46,8 @@
         name: "music",
       data(){
           return{
-            currenttime:'',
-            durationtime:'',
+            currenttime:0,
+            durationtime:0,
             musicjdtpoint:{
               width:'0%'
             },
@@ -65,10 +65,10 @@
       },
       methods:{
         listchoose(obj){
-          // console.log(`歌曲的序列号（下标）为：${index}`)
+          this.musicpause()
           this.$refs.audio.pause();
           this.currentmusicdata = obj;
-          this.changemusicstatus('play')
+          this.musicplay()
         },
         canvasdone(){
           let audio = this.$refs.audio;
@@ -144,9 +144,6 @@
           }
           render()
         },
-        setfirstmusic(){
-          // this.currentmusicdata = this.musicarr[1];
-        },
         getmusiclist(){
           this.$ajax.get(this.musicdata.musilistapi).then(e=>{
             console.log(e.data)
@@ -154,52 +151,79 @@
             this.currentmusicdata.url = e.data.music[0].url
           })
         },
-
-        changemusicstatus(status){
-          if(status == 'play'){
-            // clearInterval(timeinterval)
-            // this.$refs.audio.pause();
-            this.$refs.audio.play();
-            this.showmusicmsg()
-            this.musicstatus = true;
-            return;
-          }
+        musicplay(){
+          this.$refs.audio.play();
+          this.musicstatus = true;
+          this.showmusicmsg(true)
+        },
+        musicpause(){
+          this.$refs.audio.pause();
+          this.musicstatus = false;
+          this.showmusicmsg(false)
+        },
+        changemusicstatus(){
           if(this.musicstatus){
             // true正在播放
-            // clearInterval(timeinterval)
-            this.$refs.audio.pause();
-            this.musicstatus = false;
-            this.showmusicmsg()
+            this.musicpause()
           }else {
             // false暂停播放
-            // clearInterval(timeinterval)
-            this.$refs.audio.play();
-            this.musicstatus = true
-
-            let timeinterval = setInterval(()=>{
-              this.showmusicmsg()
-            },200)
+            this.musicplay()
           }
         },
-        showmusicmsg(){
-          let musiclong = this.$refs.audio.duration||0
-          let musiccurrentTime = this.$refs.audio.currentTime||0
-          let musicvolume = this.$refs.audio.volume||1.0
-          this.currenttime = musiccurrentTime
-          this.durationtime = musiclong
-          this.musicjdtpoint.width = musiccurrentTime/musiclong*100 + '%'
-          this.musicvoicepoint.left = musicvolume*100 + '%'
+        showmusicmsg(status){
+          let _this = this;
+          if(status){
+            setInterval(function () {
+              clearInterval()
+              let musiclong = _this.$refs.audio.duration||0;
+              let musiccurrentTime = _this.$refs.audio.currentTime||0;
+              let musicvolume = _this.$refs.audio.volume||1.0;
+              _this.currenttime = musiccurrentTime;
+              _this.durationtime = musiclong;
+              _this.musicjdtpoint.width = musiccurrentTime/musiclong*100 + '%';
+              _this.musicvoicepoint.left = musicvolume*100 + '%';
+              _this.currenttimedurationtime();
+              // TODO: 显示的时间总时长有bug
+            },1000)
+          }else {
+            clearInterval()
+            let musiclong = _this.$refs.audio.duration||0;
+            let musiccurrentTime = _this.$refs.audio.currentTime||0;
+            let musicvolume = _this.$refs.audio.volume||1.0;
+            _this.currenttime = musiccurrentTime;
+            _this.durationtime = musiclong;
+            _this.musicjdtpoint.width = musiccurrentTime/musiclong*100 + '%';
+            _this.musicvoicepoint.left = musicvolume*100 + '%';
+            _this.currenttimedurationtime();
+          }
         },
         changevoicce(e){
           console.log(e)
           // todo 添加调节音量  及添加调节播放进度功能
           // todo 查看点击列表不播放问题
-        }
-      },
-      watch:{
-        // musicdata(nwwval,oldval){
-        //   console.log('watch')
-        // }
+        },
+
+        currenttimedurationtime(){
+          let currenttimeRRR = Math.floor(this.currenttime)||0
+          console.log(currenttimeRRR)
+          if(currenttimeRRR<10){
+            this.currenttime = '00:0'+ currenttimeRRR
+          }else if(9<currenttimeRRR<60){
+            this.currenttime = '00:'+ currenttimeRRR
+          }else {
+            this.currenttime =  Math.floor(currenttimeRRR/60)+':'+ currenttimeRRR%60
+          }
+
+          let durationtimeRRR = Math.floor(this.durationtime)||0
+          console.log(durationtimeRRR)
+          if(durationtimeRRR<10){
+            this.durationtime = '00:0'+ durationtimeRRR
+          }else if(9<durationtimeRRR<60){
+            this.durationtime = '00:'+ durationtimeRRR
+          }else {
+            this.durationtime =  Math.floor(durationtimeRRR/60)+':'+ durationtimeRRR%60
+          }
+        },
       },
       mounted(){
         // console.log(this.musicdata)
@@ -275,7 +299,7 @@
     .music_showbox{
       position: relative;
       width: 70%;
-      height: 400px;
+      height: 440px;
       #music_canvas{
         width: 100%;
         height: 100%;
