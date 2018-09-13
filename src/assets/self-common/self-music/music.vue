@@ -30,7 +30,7 @@
           </div>
           <div class="music_voice_number">{{musicvoicepoint.left}}</div>
           <div class="music_time">
-            {{currenttime}}/{{durationtime}}
+            {{currenttime | time}}/{{durationtime | time}}
           </div>
         </div>
         <!--<audio controls ref="audio" src="http://www.ooo0o.com/demo/music/fade.mp3"></audio>-->
@@ -173,8 +173,8 @@
         showmusicmsg(status){
           let _this = this;
           if(status){
+            clearInterval()
             setInterval(function () {
-              clearInterval()
               let musiclong = _this.$refs.audio.duration||0;
               let musiccurrentTime = _this.$refs.audio.currentTime||0;
               let musicvolume = _this.$refs.audio.volume||1.0;
@@ -182,7 +182,7 @@
               _this.durationtime = musiclong;
               _this.musicjdtpoint.width = musiccurrentTime/musiclong*100 + '%';
               _this.musicvoicepoint.left = musicvolume*100 + '%';
-              _this.currenttimedurationtime();
+              // _this.currenttimedurationtime();
               // TODO: 显示的时间总时长有bug
             },1000)
           }else {
@@ -194,8 +194,10 @@
             _this.durationtime = musiclong;
             _this.musicjdtpoint.width = musiccurrentTime/musiclong*100 + '%';
             _this.musicvoicepoint.left = musicvolume*100 + '%';
-            _this.currenttimedurationtime();
+            // _this.currenttimedurationtime();
           }
+          // console.log(_this.currenttime)
+          // console.log(_this.durationtime)
         },
         changevoicce(e){
           console.log(e)
@@ -203,33 +205,65 @@
           // todo 查看点击列表不播放问题
         },
 
+        // 用过滤器代替此方法
         currenttimedurationtime(){
+          let _this=this;
           let currenttimeRRR = Math.floor(this.currenttime)||0
           console.log(currenttimeRRR)
           if(currenttimeRRR<10){
-            this.currenttime = '00:0'+ currenttimeRRR
+            _this.currenttime = '00:0'+ currenttimeRRR
           }else if(9<currenttimeRRR<60){
-            this.currenttime = '00:'+ currenttimeRRR
+            _this.currenttime = '00:'+ currenttimeRRR
           }else {
-            this.currenttime =  Math.floor(currenttimeRRR/60)+':'+ currenttimeRRR%60
+            _this.currenttime =  Math.floor(currenttimeRRR/60) + ':' + (currenttimeRRR % 60);
           }
+          console.log(_this.currenttime)
 
           let durationtimeRRR = Math.floor(this.durationtime)||0
           console.log(durationtimeRRR)
           if(durationtimeRRR<10){
-            this.durationtime = '00:0'+ durationtimeRRR
+            _this.durationtime = '00:0'+ durationtimeRRR
           }else if(9<durationtimeRRR<60){
-            this.durationtime = '00:'+ durationtimeRRR
+            _this.durationtime = '00:'+ durationtimeRRR
           }else {
-            this.durationtime =  Math.floor(durationtimeRRR/60)+':'+ durationtimeRRR%60
+            _this.durationtime =  Math.floor(durationtimeRRR / 60) + ':' + (durationtimeRRR % 60);
           }
+          console.log(durationtimeRRR % 60)
         },
+      },
+      filters:{
+        time:function (value) {
+          if (!value) return ''
+          let timeval = Math.floor(value);
+          if(timeval < 10){
+            return '00:0'+ timeval
+          }else if(timeval > 59){
+            let second;
+            if(timeval % 60 < 10){
+              second = '0'+ (timeval % 60)
+            }else {
+              second = timeval % 60
+            }
+            let minutes;
+            if(Math.floor( timeval / 60) < 10){
+              minutes = '0'+ (Math.floor( timeval / 60))
+            }else {
+              minutes = Math.floor( timeval / 60)
+            }
+            return  minutes + ':' + second;
+          }else if(9 < timeval < 15){
+            return '00:'+ timeval
+          }
+        }
       },
       mounted(){
         // console.log(this.musicdata)
         this.getmusiclist()
         this.canvasdone()
         this.showmusicmsg()
+      },
+      beforeDestroy(){
+        clearInterval()
       }
     }
 </script>

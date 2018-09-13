@@ -25,10 +25,16 @@
       }
     },
     mounted(){
-      // let wrapcontent_height = this.$refs.wrapcontent.offsetTop;
-      let wrapcontent_height = this.$refs.wrapcontent.offsetHeight;
-      // console.log(wrapcontent_height)
-      this.$store.commit('muthomewraocontent_height',wrapcontent_height)
+      // // let wrapcontent_height = this.$refs.wrapcontent.offsetTop;
+      // let wrapcontent_height = this.$refs.wrapcontent.offsetHeight;
+      // // console.log(wrapcontent_height)
+      // this.$store.commit('muthomewraocontent_height',wrapcontent_height)
+    },
+    watch:{
+      // $route(){
+      //   let wrapcontent_height = this.$refs.wrapcontent.offsetHeight;
+      //   this.$store.commit('muthomewraocontent_height',wrapcontent_height)
+      // }
     }
   }
 </script>
